@@ -1,5 +1,5 @@
 ﻿/*
-Source von Simon | sim-phi.de
+Code by Simon | sim-phi.de
 
 Capture: 
 https://autohotkey.com/board/topic/46722-capture-screenshot-to-jpg/
