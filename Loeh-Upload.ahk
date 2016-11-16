@@ -23,7 +23,7 @@ FileCreateDir, %A_MyDocuments%/Loeh-Upload/IMG
 FileCreateDir, %A_MyDocuments%/Loeh-Upload/Settings
 SetWorkingDir %A_MyDocuments%/Loeh-Upload/ ;WorkingDir setzen
 FileDelete,%A_ScriptDir%\update.bat
-Version := 0.123
+Version := 0.124
 TrayTime := 4000
 UrlDownloadToFile, http://sim-phi.de/upload_version.txt, temp.txt
 Loop, Read, temp.txt
@@ -532,6 +532,8 @@ Gui, 3: +AlwaysOnTop
 Gui, 3: -caption
 Gui, 3: Add, Picture, x-450 y0 w800 h400 , %A_MyDocuments%/Loeh-Upload/IMG/bg.png
 Gui, 3: Add, Text, x317 y8 w27 h27 +BackgroundTrans gHide_Tip,
+Gui, 3: Add, Text, x0 y0 w313 h71 +BackgroundTrans gMove,
+Gui, 3: Add, Text, x317 y35 w33 h36 +BackgroundTrans gMove,
 Gui, 3: font, s16
 Gui, 3: Add, Text, x30 y20 w250 h36 +BackgroundTrans cwhite, Info
 Gui, 3: font,
