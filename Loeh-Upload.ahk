@@ -25,7 +25,7 @@ SetWorkingDir %A_MyDocuments%/Loeh-Upload/ ;WorkingDir setzen
 FileDelete,%A_ScriptDir%\update.bat
 Version := 0.124
 TrayTime := 4000
-UrlDownloadToFile, http://sim-phi.de/upload_version.txt, temp.txt
+UrlDownloadToFile, https://sim-phi.de/upload_version.txt, temp.txt
 Loop, Read, temp.txt
 {
 if A_index =1
@@ -451,7 +451,7 @@ return
 
 Update:
 UploadTip("Loeh-Upload", "Downloading update.", TrayTime)
-UrlDownloadToFile,http://www.sim-phi.de/Loeh-Upload.exe, %A_ScriptFullPath%.new
+UrlDownloadToFile,https://www.sim-phi.de/Loeh-Upload.exe, %A_ScriptFullPath%.new
 BatchFile=
 (
 Ping 127.0.0.1
@@ -461,7 +461,7 @@ Move "%A_ScriptFullPath%.new" "%A_ScriptFullPath%"
 )
 FileAppend,%BatchFile%,%A_ScriptDir%\update.bat
 Run,%A_ScriptDir%\update.bat,,hide
-Run http://www.sim-phi.de/changelog.txt
+Run https://www.sim-phi.de/changelog.txt
 ExitApp
 return
 
