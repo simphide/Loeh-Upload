@@ -23,7 +23,7 @@ FileCreateDir, %A_MyDocuments%/Loeh-Upload/IMG
 FileCreateDir, %A_MyDocuments%/Loeh-Upload/Settings
 SetWorkingDir %A_MyDocuments%/Loeh-Upload/ ;WorkingDir setzen
 FileDelete,%A_ScriptDir%\update.bat
-Version := 0.124
+Version := 0.125
 TrayTime := 4000
 UrlDownloadToFile, https://sim-phi.de/upload_version.txt, temp.txt
 Loop, Read, temp.txt
@@ -36,6 +36,7 @@ global IsSettingsopen = false
 global IsTrayopen = false
 global loops := 4
 global Animation
+global Expected_Time
 Ini_Path= %A_MyDocuments%/Loeh-Upload/Settings/Loeh-Upload.ini
 
 FileInstall, tray.wav, %A_MyDocuments%\Loeh-Upload\IMG\tray.wav, 0
@@ -72,6 +73,7 @@ menu, tray, add, Upload Clipboard | Ctrl+Shift+5, Do5
 menu, tray, add, 
 menu, tray, add, Reload
 menu, tray, add, Exit
+Menu, Tray, Tip, Loeh-Upload | Your File/Screen-Uploader
 
 IfNotExist, %Ini_Path% ;Erste Benutzung
 {
@@ -730,9 +732,19 @@ return
 
 FTPUpload(filename, file_check, Server, Name, PW, Server_Pfad1){ ;FTP Upload
 Settimer, IconChanger, 200
-found = false ;Fuer Fehelrausgabe
 FTPCommandFile = %A_Temp%\FTPCommands.txt ;Commands
 FTPLogFile = %A_MyDocuments%/Loeh-Upload/Settings/FTPLog.txt ;Logdatei
+found = false ;Fuer Fehelrausgabe
+
+Loop, read, %FTPLogFile% ;Check if upload erfolgreich
+{
+	If (InStr(A_LoopReadLine, "KB/s"))
+	{
+		RegExMatch(A_LoopReadLine,"(.*)Sekunden (.*)KB/s", DataRate)
+		break
+	}
+	DataRate2 := 0
+}
 FileDelete %FTPCommandFile%  ; Alte Datei loeschen
 FileAppend,  ;  Vefehle fuer FTP.exe
 (
@@ -771,6 +783,14 @@ put "%filename%"
 ls -l
 quit
 ), %FTPCommandFile%
+
+If DataRate2!=0
+{
+FileGetSize, filesize, %filename%
+Expected_Time := Round(filesize/(DataRate2*1000),0)
+Expected_Time := Expected_Time+3
+Settimer, TimeTip, 1000
+}
 RunWait %comspec% /c ftp.exe -s:"%FTPCommandFile%" >"%FTPLogFile%", ,Hide ;FTP versteckt ausfuehren
 FileDelete %FTPCommandFile%  ; Loeschen da Daten in dieser Datei
 ;Run %FTPLogFile%  ; Zum debuggen
@@ -849,4 +869,19 @@ else
 	Gui, 1: Show, NA x%xpos% y%ypos% h70 w350, Loeh-Tip
 }
 return 1
+}
+
+;---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+TimeTip:
+{
+if Expected_Time = 0
+{
+	Menu, Tray, Tip, Loeh-Upload | Your File/Screen-Uploader
+	Settimer, TimeTip, off
+	return
+}
+Menu, Tray, Tip, Estimated Time: %Expected_Time% Seconds
+Expected_Time:=Expected_Time-1
+return
 }
