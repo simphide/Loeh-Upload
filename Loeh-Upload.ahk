@@ -414,9 +414,6 @@ return
 OpenLink1:
 Listarray := StrSplit(upload1, " | ")
 link1 := Listarray[1]
-if (A_GuiEvent = "RightClick")
-Clipboard = %link1%
-else
 Run %link1%
 return
 
