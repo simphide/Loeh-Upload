@@ -1,4 +1,4 @@
-﻿/*
+/*
 Code by Simon | sim-phi.de
 
 Capture: 
@@ -381,6 +381,7 @@ Menu, Tray, Icon, %A_MyDocuments%/Loeh-Upload/IMG/full.ico
 sleep, 200
 Menu, Tray, Icon, %A_MyDocuments%/Loeh-Upload/IMG/empty.ico
 sleep, 200
+return
 
 ;---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
